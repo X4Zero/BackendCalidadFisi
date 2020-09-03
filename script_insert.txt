@@ -1,0 +1,29 @@
+INSERT INTO escuela (nombre) VALUES ('Ingeniería de Sistemas'),('Ingeniería de Software');
+
+INSERT INTO dimension (nombre,descripcion) VALUES ('Fiabilidad','Fiabilidad'),
+('Capacidad de Respuesta','Capacidad de Respuesta'),
+('Seguridad','Seguridad'),
+('Empatía','Empatía'),
+('Tangibilidad','Tangibilidad');
+
+INSERT INTO pregunta (descripcion,id_dimension) VALUES 
+('1. ¿Considera que el personal administrativo de la Facultad muestra sincero interés en resolver problemas e inquietudes que se le han presentado en algún trámite virtual o por correo electrónico?',1),
+('2. ¿Considera que se ha manejado de manera eficiente el proceso de matrícula y/o rectificación de matrícula en este ciclo virtual?',1),
+('3. ¿Considera que los docentes cumplen con el contenido del Sílabo del Curso con exactitud?',1),
+('4. ¿Considera que el servicio académico en esta modalidad virtual ha sido efectivo y ha cumplido con sus expectativas?',1),
+('5. ¿En general, considera que la atención que recibe por parte del personal administrativo en cierta área y/o oficina de la facultad es rápida?',2),
+('6. ¿Considera que el tiempo para obtener una respuesta de una solicitud y/o trámite documentario realizado en la facultad es rápido?',2),
+('7. ¿Considera que ante un problema ocurrido en el proceso de matrícula de la facultad, se brinda una adecuada solución a los alumnos de manera rápida?',2),
+('8. ¿Los docentes y personal administrativo de la facultad han estado siempre dispuestos a brindarle ayuda?',2),
+('9. ¿Considera que el personal administrativo de la facultad está atendiendo adecuadamente los trámites de los alumnos?',3),
+('10. ¿En el semestre 2020-1 considera que se matriculó en los cursos y el horario que deseaba?',3),
+('11. ¿Considera que los docentes han sido adecuadamente capacitados para realizar las clases virtuales?',3),
+('12. ¿Considera que el trato de los docentes a los estudiantes que presentan problemas durante las clases virtuales es el adecuado? (por ejemplo si tuvieran  problemas de conexión durante una evaluación)',3),
+('13. ¿Considera que la facultad se preocupa y da un seguimiento adecuado a los estudiantes que se encuentran observados debido a su rendimiento académico?',4),
+('14. ¿Considera que la facultad ha adecuado el acceso a sus diversas áreas para aquellos estudiantes y maestros con discapacidad o dificultades motoras?',4),
+('15. ¿Considera que los docentes de la facultad toman en consideración la situación del alumno en el contexto de la pandemia respecto a sus dificultades de acceso tecnológico?',4),
+('16. ¿Considera que la facultad realmente toma en cuenta los reclamos y/o dificultades de los estudiantes?',4),
+('17. ¿Considera que la Facultad cuenta con  equipos informáticos(Computadoras, proyectores)  adecuados y en buen funcionamiento?',5),
+('18. ¿Considera que la facultad cuenta con aulas, auditorios, laboratorios, bibliotecas, etc , en buenas condiciones para que usted realice su actividad educativa?',5),
+('19. ¿Considera usted que la facultad cuenta con espacios aseados, buena  iluminación y con apariencia agradable ( Aulas, laboratorios, servicios higiénicos, etc)?',5),
+('20. ¿Considera que los docentes y administrativos de la facultad tienen un aspecto pulcro y son bien presentados?',5);

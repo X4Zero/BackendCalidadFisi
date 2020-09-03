@@ -1,0 +1,72 @@
+# API REST 
+
+## RESPUESTAS - ALUMNOS
+
+### LLena y actualiza la base de datos
+http://127.0.0.1:5000/traer_data -> como metodo get
+
+## FIN RESPUESTAS - ALUMNOS
+
+
+## PREGUNTAS
+
+### Obtener Todas las preguntas
+http://127.0.0.1:5000/pregunta -> como metodo get
+
+### Obtener Pregunta  por id
+http://127.0.0.1:5000/pregunta/<id> -> como metodo get
+
+Por ejemplo, http://127.0.0.1:5000/pregunta/2 traerá como resultado lo siguiente:
+{
+    "pregunta": {
+        "descripcion": "2. ¿Considera que se ha manejado de manera eficiente el proceso de matrícula y/o rectificación de matrícula en este ciclo virtual?",
+        "id_dimension": 1,
+        "id_pregunta": 2
+    }
+}
+
+### Ingresar Pregunta
+http://127.0.0.1:5000/pregunta -> como metodo post
+En Body, como form-data ingresar como en el siguiente ejemplo
+
+/*
+var formdata = new FormData();
+formdata.append("descripcion", "1. ¿Considera que el personal administrativo de la Facultad muestra sincero interés en resolver problemas e inquietudes que se le han presentado en algún trámite virtual o por correo electrónico?");
+formdata.append("id_dimension", "1");
+
+var requestOptions = {
+  method: 'POST',
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:5000/pregunta/1", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+*/
+
+### Editar Pregunta
+http://127.0.0.1:5000/pregunta/<id> -> como metodo post
+En Body, como form-data ingresar como en el siguiente ejemplo
+/*
+//http://127.0.0.1:5000/pregunta/1 <- ubicar ahí el id de la pregunta que se quiere modificar
+
+var formdata = new FormData();
+formdata.append("descripcion", "1. ¿Considera que el personal administrativo de la Facultad muestra sincero interés en resolver problemas e inquietudes que se le han presentado en algún trámite virtual o por correo electrónico?");
+formdata.append("id_dimension", "1");
+
+var requestOptions = {
+  method: 'POST',
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:5000/pregunta/1", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+*/
+
+## FIN PREGUNTAS
+

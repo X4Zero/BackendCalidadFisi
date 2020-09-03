@@ -1,0 +1,43 @@
+create database fisi_calidad;
+
+use fisi_calidad;
+
+create table dimension(
+id_dimension  int NOT NULL AUTO_INCREMENT,
+nombre varchar(30) not null,
+descripcion varchar(100) not null,
+PRIMARY KEY (id_dimension)
+);
+
+create table pregunta(
+id_pregunta  int NOT NULL AUTO_INCREMENT,
+descripcion text,
+id_dimension int,
+PRIMARY KEY (id_pregunta),
+FOREIGN KEY (id_dimension) REFERENCES dimension(id_dimension) ON DELETE CASCADE
+);
+
+create table escuela(
+id_escuela  int NOT NULL AUTO_INCREMENT,
+nombre text,
+PRIMARY KEY (id_escuela)
+);
+
+create table alumno(
+id_alumno int NOT NULL AUTO_INCREMENT,
+sexo char(1),
+anio_ingreso varchar(4),
+id_escuela int,
+PRIMARY KEY (id_alumno),
+FOREIGN KEY (id_escuela) REFERENCES escuela(id_escuela) ON DELETE CASCADE
+);
+
+create table respuesta(
+id_respuesta int NOT NULL AUTO_INCREMENT,
+respuesta text,
+id_pregunta int,
+id_alumno int,
+PRIMARY KEY (id_respuesta),
+FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta) ON DELETE CASCADE,
+FOREIGN KEY (id_alumno) REFERENCES alumno(id_alumno) ON DELETE CASCADE
+);
