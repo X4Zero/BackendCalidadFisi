@@ -5,9 +5,59 @@
 ### LLena y actualiza la base de datos
 http://127.0.0.1:5000/traer_data -> como metodo get
 
+### Obtener la cantidad de encuestados
+http://127.0.0.1:5000/alumnos -> como metodo get
+resultado:
+{
+    "respuesta": {
+        "cantidad encuestados": 49
+    },
+    "status": 200
+}
+
 ### Obtener las respuestas de todas las dimensiones
 http://127.0.0.1:5000/dimension -> como metodo get
-
+resultado:
+{
+    "respuesta": {
+        "Capacidad de Respuesta": {
+            "De Acuerdo": 33,
+            "En Desacuerdo": 65,
+            "Muy de Acuerdo": 1,
+            "Muy en Desacuerdo": 22,
+            "Neutral": 75
+        },
+        "Empatía": {
+            "De Acuerdo": 38,
+            "En Desacuerdo": 56,
+            "Muy de Acuerdo": 4,
+            "Muy en Desacuerdo": 20,
+            "Neutral": 78
+        },
+        "Fiabilidad": {
+            "De Acuerdo": 51,
+            "En Desacuerdo": 45,
+            "Muy de Acuerdo": 2,
+            "Muy en Desacuerdo": 12,
+            "Neutral": 86
+        },
+        "Seguridad": {
+            "De Acuerdo": 45,
+            "En Desacuerdo": 46,
+            "Muy de Acuerdo": 17,
+            "Muy en Desacuerdo": 21,
+            "Neutral": 67
+        },
+        "Tangibilidad": {
+            "De Acuerdo": 52,
+            "En Desacuerdo": 62,
+            "Muy de Acuerdo": 6,
+            "Muy en Desacuerdo": 11,
+            "Neutral": 65
+        }
+    },
+    "status": 200
+}
 
 ## FIN RESPUESTAS - ALUMNOS
 
