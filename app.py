@@ -120,6 +120,45 @@ def traer_data_bd():
             "status":500
         }
     return response
+
+@app.route('/dimension')
+def respuestas_dimensiones():
+    print("TRAER_RESPUESTA_POR_DIMENSION")
+
+    try:
+        cur = mysql.connection.cursor()
+        script_select = '''SELECT d.nombre, r.respuesta, COUNT(*)
+FROM pregunta P
+JOIN dimension d ON p.id_dimension = d.id_dimension
+LEFT JOIN respuesta r ON r.id_pregunta = p.id_pregunta
+GROUP BY d.nombre, r.respuesta;
+        '''
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        respuestas  =  cur.fetchall()
+
+        #parseamos las respuestas
+
+        df_dimensiones = pd.DataFrame(respuestas, columns=['dimensión','opción','respuestas'])
+        df_respuestas = df_dimensiones.groupby(['dimensión','opción'])['respuestas'].mean().unstack(1)
+        resultado = df_respuestas.to_dict(orient='index')
+
+        print(resultado)
+        response = {
+            "respuesta": resultado,
+            "status":200
+        }
+
+    except Exception as e:
+        print(e)
+        response={
+            "respuesta":"Error",
+            "status":500
+        }
+    return response
+        
+
+
 # FIN RESPUESTAS - ALUMNOS
 
 # PREGUNTAS

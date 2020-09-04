@@ -5,6 +5,10 @@
 ### LLena y actualiza la base de datos
 http://127.0.0.1:5000/traer_data -> como metodo get
 
+### Obtener las respuestas de todas las dimensiones
+http://127.0.0.1:5000/dimension -> como metodo get
+
+
 ## FIN RESPUESTAS - ALUMNOS
 
 
