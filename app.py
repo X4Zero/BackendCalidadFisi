@@ -184,7 +184,7 @@ def resultados_dimensiones():
     try:
         cur = mysql.connection.cursor()
         script_select = '''SELECT d.nombre, r.respuesta, COUNT(*)
-FROM pregunta P
+FROM pregunta p
 JOIN dimension d ON p.id_dimension = d.id_dimension
 JOIN respuesta r ON r.id_pregunta = p.id_pregunta
 GROUP BY d.nombre, r.respuesta;
