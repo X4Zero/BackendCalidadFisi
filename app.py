@@ -192,10 +192,10 @@ GROUP BY d.nombre, r.respuesta;
         print("script_select: ",script_select)
         cur.execute(script_select)
         respuestas  =  cur.fetchall()
-
+        print(respuestas)
         #parseamos las respuestas
 
-        df_dimensiones = pd.DataFrame(respuestas, columns=['dimensión','opción','respuestas'])
+        df_dimensiones = pd.DataFrame.from_records(respuestas, columns=['dimensión','opción','respuestas'])
         df_respuestas = df_dimensiones.groupby(['dimensión','opción'])['respuestas'].mean().unstack(1)
         resultado = df_respuestas.to_dict(orient='index')
 
