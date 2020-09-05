@@ -10,12 +10,60 @@ http://127.0.0.1:5000/alumnos -> como metodo get
 resultado:
 {
     "respuesta": {
-        "cantidad encuestados": 49
+        "cantidad encuestados": 56,
+        "encuestados por anio": [
+            {
+                "año": "2015",
+                "encuestados": 32
+            },
+            {
+                "año": "2016",
+                "encuestados": 8
+            },
+            {
+                "año": "2014",
+                "encuestados": 6
+            },
+            {
+                "año": "2017",
+                "encuestados": 5
+            },
+            {
+                "año": "2018",
+                "encuestados": 1
+            },
+            {
+                "año": "2021",
+                "encuestados": 1
+            },
+            {
+                "año": "2019",
+                "encuestados": 1
+            },
+            {
+                "año": "2006",
+                "encuestados": 1
+            },
+            {
+                "año": "2020",
+                "encuestados": 1
+            }
+        ],
+        "encuestados por sexo": [
+            {
+                "encuestados": 50,
+                "sexo": "M"
+            },
+            {
+                "encuestados": 6,
+                "sexo": "F"
+            }
+        ]
     },
     "status": 200
 }
 
-### Obtener las respuestas de todas las dimensiones
+### Obtener las respuestas de todas las dimensiones en general
 http://127.0.0.1:5000/dimension -> como metodo get
 resultado:
 {
@@ -54,6 +102,277 @@ resultado:
             "Muy de Acuerdo": 6,
             "Muy en Desacuerdo": 11,
             "Neutral": 65
+        }
+    },
+    "status": 200
+}
+
+### Obtener las respuestas de acuerdo a las dimensiones y preguntas
+http://127.0.0.1:5000/respuesta -> como metodo get
+resultado:
+{
+    "respuesta": {
+        "Capacidad de Respuesta": {
+            "5": {
+                "pregunta": "5. ¿En general, considera que la atención que recibe por parte del personal administrativo en cierta área y/o oficina de la facultad es rápida?",
+                "resultados": {
+                    "De Acuerdo": 6.0,
+                    "En Desacuerdo": 19.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 7.0,
+                    "Neutral": 23.0
+                }
+            },
+            "6": {
+                "pregunta": "6. ¿Considera que el tiempo para obtener una respuesta de una solicitud y/o trámite documentario realizado en la facultad es rápido?",
+                "resultados": {
+                    "De Acuerdo": 9.0,
+                    "En Desacuerdo": 24.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 11.0,
+                    "Neutral": 12.0
+                }
+            },
+            "7": {
+                "pregunta": "7. ¿Considera que ante un problema ocurrido en el proceso de matrícula de la facultad, se brinda una adecuada solución a los alumnos de manera rápida?",
+                "resultados": {
+                    "De Acuerdo": 3.0,
+                    "En Desacuerdo": 22.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 10.0,
+                    "Neutral": 21.0
+                }
+            },
+            "8": {
+                "pregunta": "8. ¿Los docentes y personal administrativo de la facultad han estado siempre dispuestos a brindarle ayuda?",
+                "resultados": {
+                    "De Acuerdo": 16.0,
+                    "En Desacuerdo": 9.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 5.0,
+                    "Neutral": 26.0
+                }
+            }
+        },
+        "Empatía": {
+            "13": {
+                "pregunta": "13. ¿Considera que la facultad se preocupa y da un seguimiento adecuado a los estudiantes que se encuentran observados debido a su rendimiento académico?",
+                "resultados": {
+                    "De Acuerdo": 15.0,
+                    "En Desacuerdo": 11.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 6.0,
+                    "Neutral": 23.0
+                }
+            },
+            "14": {
+                "pregunta": "14. ¿Considera que la facultad ha adecuado el acceso a sus diversas áreas para aquellos estudiantes y maestros con discapacidad o dificultades motoras?",
+                "resultados": {
+                    "De Acuerdo": 9.0,
+                    "En Desacuerdo": 16.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 3.0,
+                    "Neutral": 27.0
+                }
+            },
+            "15": {
+                "pregunta": "15. ¿Considera que los docentes de la facultad toman en consideración la situación del alumno en el contexto de la pandemia respecto a sus dificultades de acceso tecnológico?",
+                "resultados": {
+                    "De Acuerdo": 14.0,
+                    "En Desacuerdo": 11.0,
+                    "Muy de Acuerdo": 3.0,
+                    "Muy en Desacuerdo": 7.0,
+                    "Neutral": 21.0
+                }
+            },
+            "16": {
+                "pregunta": "16. ¿Considera que la facultad realmente toma en cuenta los reclamos y/o dificultades de los estudiantes?",
+                "resultados": {
+                    "De Acuerdo": 4.0,
+                    "En Desacuerdo": 20.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 10.0,
+                    "Neutral": 22.0
+                }
+            }
+        },
+        "Fiabilidad": {
+            "1": {
+                "pregunta": "1. ¿Considera que el personal administrativo de la Facultad muestra sincero interés en resolver problemas e inquietudes que se le han presentado en algún trámite virtual o por correo electrónico?",
+                "resultados": {
+                    "De Acuerdo": 11.0,
+                    "En Desacuerdo": 12.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 2.0,
+                    "Neutral": 31.0
+                }
+            },
+            "2": {
+                "pregunta": "2. ¿Considera que se ha manejado de manera eficiente el proceso de matrícula y/o rectificación de matrícula en este ciclo virtual?",
+                "resultados": {
+                    "De Acuerdo": 14.0,
+                    "En Desacuerdo": 13.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 7.0,
+                    "Neutral": 22.0
+                }
+            },
+            "3": {
+                "pregunta": "3. ¿Considera que los docentes cumplen con el contenido del Sílabo del Curso con exactitud?",
+                "resultados": {
+                    "De Acuerdo": 19.0,
+                    "En Desacuerdo": 15.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 2.0,
+                    "Neutral": 19.0
+                }
+            },
+            "4": {
+                "pregunta": "4. ¿Considera que el servicio académico en esta modalidad virtual ha sido efectivo y ha cumplido con sus expectativas?",
+                "resultados": {
+                    "De Acuerdo": 18.0,
+                    "En Desacuerdo": 11.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 5.0,
+                    "Neutral": 21.0
+                }
+            }
+        },
+        "Seguridad": {
+            "9": {
+                "pregunta": "9. ¿Considera que el personal administrativo de la facultad está atendiendo adecuadamente los trámites de los alumnos?",
+                "resultados": {
+                    "De Acuerdo": 11.0,
+                    "En Desacuerdo": 12.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 3.0,
+                    "Neutral": 30.0
+                }
+            },
+            "10": {
+                "pregunta": "10. ¿En el semestre 2020-1 considera que se matriculó en los cursos y el horario que deseaba?",
+                "resultados": {
+                    "De Acuerdo": 17.0,
+                    "En Desacuerdo": 12.0,
+                    "Muy de Acuerdo": 12.0,
+                    "Muy en Desacuerdo": 5.0,
+                    "Neutral": 10.0
+                }
+            },
+            "11": {
+                "pregunta": "11. ¿Considera que los docentes han sido adecuadamente capacitados para realizar las clases virtuales?",
+                "resultados": {
+                    "De Acuerdo": 15.0,
+                    "En Desacuerdo": 12.0,
+                    "Muy de Acuerdo": 3.0,
+                    "Muy en Desacuerdo": 8.0,
+                    "Neutral": 18.0
+                }
+            },
+            "12": {
+                "pregunta": "12. ¿Considera que el trato de los docentes a los estudiantes que presentan problemas durante las clases virtuales es el adecuado? (por ejemplo si tuvieran  problemas de conexión durante una evaluación)",
+                "resultados": {
+                    "De Acuerdo": 10.0,
+                    "En Desacuerdo": 13.0,
+                    "Muy de Acuerdo": 5.0,
+                    "Muy en Desacuerdo": 11.0,
+                    "Neutral": 17.0
+                }
+            }
+        },
+        "Tangibilidad": {
+            "17": {
+                "pregunta": "17. ¿Considera que la Facultad cuenta con  equipos informáticos(Computadoras, proyectores)  adecuados y en buen funcionamiento?",
+                "resultados": {
+                    "De Acuerdo": 11.0,
+                    "En Desacuerdo": 25.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 5.0,
+                    "Neutral": 14.0
+                }
+            },
+            "18": {
+                "pregunta": "18. ¿Considera que la facultad cuenta con aulas, auditorios, laboratorios, bibliotecas, etc , en buenas condiciones para que usted realice su actividad educativa?",
+                "resultados": {
+                    "De Acuerdo": 12.0,
+                    "En Desacuerdo": 19.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 3.0,
+                    "Neutral": 21.0
+                }
+            },
+            "19": {
+                "pregunta": "19. ¿Considera usted que la facultad cuenta con espacios aseados, buena  iluminación y con apariencia agradable ( Aulas, laboratorios, servicios higiénicos, etc)?",
+                "resultados": {
+                    "De Acuerdo": 17.0,
+                    "En Desacuerdo": 18.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 4.0,
+                    "Neutral": 17.0
+                }
+            },
+            "20": {
+                "pregunta": "20. ¿Considera que los docentes y administrativos de la facultad tienen un aspecto pulcro y son bien presentados?",
+                "resultados": {
+                    "De Acuerdo": 24.0,
+                    "En Desacuerdo": 5.0,
+                    "Muy de Acuerdo": 5.0,
+                    "Muy en Desacuerdo": 3.0,
+                    "Neutral": 19.0
+                }
+            }
+        }
+    },
+    "status": 200
+}
+
+### Obtener las respuestas de acuerdo a las dimensiones y preguntas por el id_dimension
+http://127.0.0.1:5000/respuesta/<id> -> como metodo get
+ejemplo: http://127.0.0.1:5000/respuesta/1 -> id_dimension = 1 es Fiabilidad
+resultado:
+{
+    "respuesta": {
+        "Fiabilidad": {
+            "1": {
+                "pregunta": "1. ¿Considera que el personal administrativo de la Facultad muestra sincero interés en resolver problemas e inquietudes que se le han presentado en algún trámite virtual o por correo electrónico?",
+                "resultados": {
+                    "De Acuerdo": 11.0,
+                    "En Desacuerdo": 12.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 2.0,
+                    "Neutral": 31.0
+                }
+            },
+            "2": {
+                "pregunta": "2. ¿Considera que se ha manejado de manera eficiente el proceso de matrícula y/o rectificación de matrícula en este ciclo virtual?",
+                "resultados": {
+                    "De Acuerdo": 14.0,
+                    "En Desacuerdo": 13.0,
+                    "Muy de Acuerdo": 0.0,
+                    "Muy en Desacuerdo": 7.0,
+                    "Neutral": 22.0
+                }
+            },
+            "3": {
+                "pregunta": "3. ¿Considera que los docentes cumplen con el contenido del Sílabo del Curso con exactitud?",
+                "resultados": {
+                    "De Acuerdo": 19.0,
+                    "En Desacuerdo": 15.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 2.0,
+                    "Neutral": 19.0
+                }
+            },
+            "4": {
+                "pregunta": "4. ¿Considera que el servicio académico en esta modalidad virtual ha sido efectivo y ha cumplido con sus expectativas?",
+                "resultados": {
+                    "De Acuerdo": 18.0,
+                    "En Desacuerdo": 11.0,
+                    "Muy de Acuerdo": 1.0,
+                    "Muy en Desacuerdo": 5.0,
+                    "Neutral": 21.0
+                }
+            }
         }
     },
     "status": 200

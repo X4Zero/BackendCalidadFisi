@@ -126,18 +126,46 @@ def encuestados():
     print("TRAER_RESPUESTA_POR_DIMENSION")
 
     try:
+
+        # NUMERO DE ENCUESTADOS
         cur = mysql.connection.cursor()
         script_select = "SELECT COUNT(*) FROM alumno;"
         print("script_select: ",script_select)
         cur.execute(script_select)
         respuesta =  cur.fetchone()
+        print(respuesta)
         cantidad_encuestados = respuesta[0]
-        #parseamos las respuestas
+        
+        # NUMERO DE ENCUESTADOS POR SEXO
+        script_select = "SELECT sexo,COUNT(*) FROM alumno GROUP BY sexo;"
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        respuesta_2 =  cur.fetchall()
 
-        print("cantidad_encuestados: ",cantidad_encuestados)
+        lista_encuestados_sexo=[]
+        for reg in respuesta_2:
+            encuestados_sexo = {"sexo":reg[0],"encuestados":reg[1]}
+            lista_encuestados_sexo.append(encuestados_sexo)
+        print(respuesta_2)
+
+        # NUMERO DE ENCUESTADOS POR AÑO DE INGRESO
+        script_select = "SELECT anio_ingreso,COUNT(*) FROM alumno GROUP BY anio_ingreso;"
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        respuesta_3 =  cur.fetchall()
+
+        lista_encuestados_anio=[]
+        for reg in respuesta_3:
+            encuestados_anio = {"año":reg[0],"encuestados":reg[1]}
+            lista_encuestados_anio.append(encuestados_anio)
+        print(respuesta_3)
 
         response = {
-            "respuesta": {"cantidad encuestados":cantidad_encuestados},
+            "respuesta": {
+                "cantidad encuestados":cantidad_encuestados,
+                "encuestados por sexo":lista_encuestados_sexo,
+                "encuestados por anio":lista_encuestados_anio,
+            },
             "status":200
         }
 
@@ -150,15 +178,15 @@ def encuestados():
     return response
 
 @app.route('/dimension')
-def respuestas_dimensiones():
-    print("TRAER_RESPUESTA_POR_DIMENSION")
+def resultados_dimensiones():
+    print("TRAER_RESULTADOS_POR_DIMENSIONES")
 
     try:
         cur = mysql.connection.cursor()
         script_select = '''SELECT d.nombre, r.respuesta, COUNT(*)
 FROM pregunta P
 JOIN dimension d ON p.id_dimension = d.id_dimension
-LEFT JOIN respuesta r ON r.id_pregunta = p.id_pregunta
+JOIN respuesta r ON r.id_pregunta = p.id_pregunta
 GROUP BY d.nombre, r.respuesta;
         '''
         print("script_select: ",script_select)
@@ -174,6 +202,116 @@ GROUP BY d.nombre, r.respuesta;
         print(resultado)
         response = {
             "respuesta": resultado,
+            "status":200
+        }
+
+    except Exception as e:
+        print(e)
+        response={
+            "respuesta":"Error",
+            "status":500
+        }
+    return response
+
+@app.route('/respuesta')
+def obtener_respuestas():
+    print("TRAER_RESPUESTAS")
+
+    try:
+        cur = mysql.connection.cursor()
+        script_select = '''
+SELECT d.nombre, p.descripcion, r.respuesta, COUNT(*)
+FROM dimension d
+JOIN pregunta p ON d.id_dimension = p.id_dimension
+JOIN respuesta r ON p.id_pregunta = r.id_pregunta
+GROUP BY d.nombre, p.descripcion, r.respuesta;
+        '''
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        respuestas  =  cur.fetchall()
+        print(respuestas)
+
+        #parseamos las respuestas
+
+        df_res =  pd.DataFrame(respuestas,columns=['dimensión','pregunta','opción','respuestas'])
+        dimensiones = list(df_res['dimensión'].unique())
+        df_res_final = df_res.pivot_table(values='respuestas',index=['dimensión','pregunta'],columns=['opción']).fillna(0)
+
+
+        diccionario = {}
+        for dim in dimensiones:
+            tmp = df_res_final.loc[dim].to_dict('index')
+            # lista_preguntas=[]
+            diccionario_preguntas={}
+            for k,v in tmp.items():
+                num = k[:2]
+                if num.isnumeric():
+                    num = int(num)
+                else:
+                    num = int(num[0])
+                diccionario_preguntas[num] = {"pregunta":k,"resultados":v}
+                # lista_preguntas.append({"pregunta":k,"resultados":v})
+            diccionario[dim] = diccionario_preguntas
+
+        print(diccionario)
+        response = {
+            "respuesta": diccionario,
+            "status":200
+        }
+
+    except Exception as e:
+        print(e)
+        response={
+            "respuesta":"Error",
+            "status":500
+        }
+    return response
+
+@app.route('/respuesta/<id>')
+def obtener_respuestas_dimension(id):
+    print("TRAER_RESPUESTAS_DIMENSION")
+
+    try:
+        cur = mysql.connection.cursor()
+        script_select = '''
+SELECT d.nombre, p.descripcion, r.respuesta, COUNT(*)
+FROM dimension d
+JOIN pregunta p ON d.id_dimension = p.id_dimension
+JOIN respuesta r ON p.id_pregunta = r.id_pregunta
+WHERE d.id_dimension = 1
+GROUP BY d.nombre, p.descripcion, r.respuesta;
+        '''
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        respuestas  =  cur.fetchall()
+        print(respuestas)
+
+        #parseamos las respuestas
+
+        df_res =  pd.DataFrame(respuestas,columns=['dimensión','pregunta','opción','respuestas'])
+        dimensiones = list(df_res['dimensión'].unique())
+        dimension = dimensiones[0]
+        df_res_final = df_res.pivot_table(values='respuestas',index=['dimensión','pregunta'],columns=['opción']).fillna(0)
+
+
+        diccionario = {}
+        for dim in dimensiones:
+            tmp = df_res_final.loc[dim].to_dict('index')
+            # lista_preguntas=[]
+            diccionario_preguntas={}
+            for k,v in tmp.items():
+                num = k[:2]
+                if num.isnumeric():
+                    num = int(num)
+                else:
+                    num = int(num[0])
+                diccionario_preguntas[num] = {"pregunta":k,"resultados":v}
+                # lista_preguntas.append({"pregunta":k,"resultados":v})
+            diccionario[dim] = diccionario_preguntas
+
+        print(diccionario)
+        response = {
+            "respuesta": diccionario,
             "status":200
         }
 
