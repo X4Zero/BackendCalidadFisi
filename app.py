@@ -333,12 +333,20 @@ def obtener_respuestas_pregunta(id):
     print("OBTENER_RESPUESTAS_PREGUNTA")
 
     try:
+        cur = mysql.connection.cursor()
+        script_select = 'SELECT * FROM pregunta WHERE id_pregunta = {}'.format(id)
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        pregunta = cur.fetchone()
+        if not pregunta :
+            return jsonify({"mensaje":"Pregunta con id={} no encontrada".format(id)})
+
         opciones = ['Muy en Desacuerdo','En Desacuerdo','Neutral','De Acuerdo','Muy de Acuerdo']
 
         # FITLTRO por id_pregunta y sexo
-        print("\nFiltro por pregunta y sexo")
+        print("\n*****Filtro por pregunta y sexo*****")
         cur = mysql.connection.cursor()
-        script_select = '''
+        script_select_sx = '''
 SELECT p.id_dimension,d.nombre,p.descripcion, r.respuesta,a.sexo, COUNT(*)
 FROM pregunta p
 JOIN respuesta r ON r.id_pregunta = p.id_pregunta
@@ -347,10 +355,10 @@ JOIN dimension d ON d.id_dimension = p.id_dimension
 WHERE p.id_pregunta={}
 GROUP BY p.descripcion, r.respuesta,a.sexo;
         '''.format(id)
-        print("script_select: ",script_select)
-        cur.execute(script_select)
+        print("script_select_sx: ",script_select_sx)
+        cur.execute(script_select_sx)
         respuestas  =  cur.fetchall()
-        print(respuestas)
+        # print(respuestas)
 
         #parseamos las respuestas
         df_respuestas_pregunta_sx= pd.DataFrame(respuestas,columns=['id_dimension','dimensión','pregunta','opción','sexo','respuestas'])
@@ -375,10 +383,10 @@ GROUP BY p.descripcion, r.respuesta,a.sexo;
             df_rp_sx[col] = df_rp_sx[col].map(int)
 
         resp_sx = df_rp_sx.to_dict(orient='index')
-        print(resp_sx)
+        print("resputas por sx: ",resp_sx)
 
         # FITLTRO por id_pregunta y escuela
-        print("\nFiltro por pregunta y escuela")
+        print("\n*****Filtro por pregunta y escuela*****")
         script_select_escuela = '''
 SELECT p.id_dimension,d.nombre,p.descripcion, r.respuesta,e.nombre, COUNT(*)
 FROM pregunta p
@@ -392,7 +400,7 @@ GROUP BY p.descripcion, r.respuesta,e.nombre;
         print("script_select_escuela: ",script_select_escuela)
         cur.execute(script_select_escuela)
         respuestas_escuela  =  cur.fetchall()
-        print(respuestas_escuela)
+        # print(respuestas_escuela)
 
         df_respuestas_pregunta_esc= pd.DataFrame(respuestas_escuela,columns=['id_dimension','dimensión','pregunta','opción','escuela','respuestas'])
 
@@ -411,10 +419,11 @@ GROUP BY p.descripcion, r.respuesta,e.nombre;
             df_rp_esc[col] = df_rp_esc[col].map(int)
 
         resp_esc = df_rp_esc.to_dict(orient='index')
-        print(resp_esc)
+        print("respuestas por escuela: ",resp_esc)
+
 
         # FITLTRO por id_pregunta y año de ingreso
-        print("\nFiltro por pregunta y año de ingreso")
+        print("\n*****Filtro por pregunta y año de ingreso*****")
         script_select_anio = '''
 SELECT p.id_dimension,d.nombre,p.descripcion, r.respuesta,a.anio_ingreso, COUNT(*)
 FROM pregunta p
@@ -427,7 +436,7 @@ GROUP BY p.descripcion, r.respuesta,a.anio_ingreso;
         print("script_select_anio: ",script_select_anio)
         cur.execute(script_select_anio)
         respuestas_anio_ingreso  =  cur.fetchall()
-        print(respuestas_anio_ingreso)
+        # print(respuestas_anio_ingreso)
 
         df_respuestas_pregunta_anio= pd.DataFrame(respuestas_anio_ingreso,columns=['id_dimension','dimensión','pregunta','opción','anio_ingreso','respuestas'])
         
@@ -446,16 +455,16 @@ GROUP BY p.descripcion, r.respuesta,a.anio_ingreso;
             df_rp_anio[col] = df_rp_anio[col].map(int)
 
         resp_anio = df_rp_anio.to_dict(orient='index')
-        print(resp_anio)
+        print("respuesas por año de ingreso", resp_anio)
 
         respuesta = {
             "id_pregunta":id_pregunta,
             "id_dimension":id_dimension,
+            "dimension":dimension,
             "pregunta":pregunta,
             "respuestas":{}
         }
-        print("\nrespuesta antes de terminar: ",respuesta)
-
+  
         for opcion in opciones:
             respuesta['respuestas'][opcion] = {
                 "sexo": resp_sx[opcion],
@@ -463,7 +472,8 @@ GROUP BY p.descripcion, r.respuesta,a.anio_ingreso;
                 "escuela": resp_esc[opcion],
             }
 
-        print("\nrespuesta después de terminar: ",respuesta)
+        print("\nResultado: ")
+        print(respuesta)
 
         response = {
             "respuesta": json.loads(json.dumps(respuesta,default=default)),
@@ -579,6 +589,33 @@ def editar_pregunta(id):
             except Exception as e:
                 print(e)
                 return jsonify({"mensaje": "Algo salió mal"})
+
+@app.route('/pregunta/<id>',methods=['DELETE'])
+def eliminar_pregunta(id):
+
+    if request.method == 'DELETE':
+        print("ELIMINAR_PREGUNTA")
+        cur = mysql.connection.cursor()
+        script_select = 'SELECT * FROM pregunta WHERE id_pregunta = {}'.format(id)
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        pregunta = cur.fetchone()
+        if not pregunta :
+            return jsonify({"mensaje":"Pregunta no encontrada"})
+        else:
+            try:
+                cur = mysql.connection.cursor()
+                script_delete = 'DELETE FROM pregunta WHERE id_pregunta = {}'.format(id)
+                print("script_delete: ",script_delete)
+                cur.execute(script_delete)
+                mysql.connection.commit()
+                response = {"mensaje": "Pregunta con id = {} eliminada satisfactoriamente".format(id)}
+
+            except Exception as e:
+                print(e)
+                response = {"mensaje": "Error"}
+        return response
+
 # FIN PREGUNTAS
 
 if __name__ == '__main__':

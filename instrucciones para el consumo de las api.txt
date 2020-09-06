@@ -378,6 +378,126 @@ resultado:
     "status": 200
 }
 
+### Obtener las respuestas de acuerdo a las dimensiones y preguntas por el id_dimension
+http://127.0.0.1:5000/respuestas_pregunta/<id> -> como metodo get
+ejemplo: http://127.0.0.1:5000/respuestas_pregunta/9 -> id_pregunta = 9
+resultado:
+{
+    "respuesta": {
+        "dimension": "Seguridad",
+        "id_dimension": 3,
+        "id_pregunta": "9",
+        "pregunta": "9. ¿Considera que el personal administrativo de la facultad está atendiendo adecuadamente los trámites de los alumnos?",
+        "respuestas": {
+            "De Acuerdo": {
+                "anio_ingreso": {
+                    "2006": 0,
+                    "2014": 1,
+                    "2015": 3,
+                    "2016": 4,
+                    "2017": 2,
+                    "2018": 1,
+                    "2019": 0,
+                    "2020": 0,
+                    "2021": 0
+                },
+                "escuela": {
+                    "Ingeniería de Sistemas": 10,
+                    "Ingeniería de Software": 1
+                },
+                "sexo": {
+                    "F": 1,
+                    "M": 10
+                }
+            },
+            "En Desacuerdo": {
+                "anio_ingreso": {
+                    "2006": 1,
+                    "2014": 3,
+                    "2015": 6,
+                    "2016": 2,
+                    "2017": 0,
+                    "2018": 0,
+                    "2019": 0,
+                    "2020": 0,
+                    "2021": 0
+                },
+                "escuela": {
+                    "Ingeniería de Sistemas": 11,
+                    "Ingeniería de Software": 1
+                },
+                "sexo": {
+                    "F": 2,
+                    "M": 10
+                }
+            },
+            "Muy de Acuerdo": {
+                "anio_ingreso": {
+                    "2006": 0,
+                    "2014": 0,
+                    "2015": 0,
+                    "2016": 0,
+                    "2017": 0,
+                    "2018": 0,
+                    "2019": 0,
+                    "2020": 0,
+                    "2021": 0
+                },
+                "escuela": {
+                    "Ingeniería de Sistemas": 0,
+                    "Ingeniería de Software": 0
+                },
+                "sexo": {
+                    "F": 0,
+                    "M": 0
+                }
+            },
+            "Muy en Desacuerdo": {
+                "anio_ingreso": {
+                    "2006": 0,
+                    "2014": 0,
+                    "2015": 2,
+                    "2016": 0,
+                    "2017": 0,
+                    "2018": 0,
+                    "2019": 0,
+                    "2020": 1,
+                    "2021": 0
+                },
+                "escuela": {
+                    "Ingeniería de Sistemas": 2,
+                    "Ingeniería de Software": 1
+                },
+                "sexo": {
+                    "F": 0,
+                    "M": 3
+                }
+            },
+            "Neutral": {
+                "anio_ingreso": {
+                    "2006": 0,
+                    "2014": 2,
+                    "2015": 21,
+                    "2016": 3,
+                    "2017": 3,
+                    "2018": 0,
+                    "2019": 1,
+                    "2020": 0,
+                    "2021": 1
+                },
+                "escuela": {
+                    "Ingeniería de Sistemas": 27,
+                    "Ingeniería de Software": 4
+                },
+                "sexo": {
+                    "F": 3,
+                    "M": 28
+                }
+            }
+        }
+    },
+    "status": 200
+}
 ## FIN RESPUESTAS - ALUMNOS
 
 
@@ -440,6 +560,10 @@ fetch("http://127.0.0.1:5000/pregunta/1", requestOptions)
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
 */
+
+
+### Eliminar Pregunta
+http://127.0.0.1:5000/pregunta/<id> -> como metodo DELETE
 
 ## FIN PREGUNTAS
 
