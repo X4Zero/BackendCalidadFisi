@@ -2,7 +2,8 @@ from flask import Flask, request
 from flask import jsonify
 from flask_cors import CORS, cross_origin
 from flask_mysqldb import MySQL
-
+import json
+import numpy
 from data import *
 
 app = Flask(__name__)
@@ -21,6 +22,10 @@ mysql = MySQL(app)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+import numpy, json
+def default(o):
+    if isinstance(o, numpy.integer): return int(o)
+    raise TypeError
 @app.route('/')
 def index():
     return 'API BACKEND - CALIDAD DE SERVICIO FISI'
@@ -322,6 +327,157 @@ GROUP BY d.nombre, p.descripcion, r.respuesta;
             "status":500
         }
     return response
+
+@app.route('/respuestas_pregunta/<id>')
+def obtener_respuestas_pregunta(id):
+    print("OBTENER_RESPUESTAS_PREGUNTA")
+
+    try:
+        opciones = ['Muy en Desacuerdo','En Desacuerdo','Neutral','De Acuerdo','Muy de Acuerdo']
+
+        # FITLTRO por id_pregunta y sexo
+        print("\nFiltro por pregunta y sexo")
+        cur = mysql.connection.cursor()
+        script_select = '''
+SELECT p.id_dimension,d.nombre,p.descripcion, r.respuesta,a.sexo, COUNT(*)
+FROM pregunta p
+JOIN respuesta r ON r.id_pregunta = p.id_pregunta
+JOIN alumno a ON a.id_alumno = r.id_alumno
+JOIN dimension d ON d.id_dimension = p.id_dimension
+WHERE p.id_pregunta={}
+GROUP BY p.descripcion, r.respuesta,a.sexo;
+        '''.format(id)
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        respuestas  =  cur.fetchall()
+        print(respuestas)
+
+        #parseamos las respuestas
+        df_respuestas_pregunta_sx= pd.DataFrame(respuestas,columns=['id_dimension','dimensión','pregunta','opción','sexo','respuestas'])
+        
+        id_pregunta = id
+        id_dimension = df_respuestas_pregunta_sx.loc[0,'id_dimension']
+        dimension = df_respuestas_pregunta_sx.loc[0,'dimensión']
+        pregunta = df_respuestas_pregunta_sx.loc[0,'pregunta']
+
+        ##
+        opciones_faltantes_sx = []
+        for opcion_presente in opciones:
+            if opcion_presente not in list(df_respuestas_pregunta_sx['opción'].unique()):
+                opciones_faltantes_sx.append(opcion_presente)
+        print("opciones faltantes en sx: ",opciones_faltantes_sx)
+        ##
+
+        df_rp_sx = df_respuestas_pregunta_sx.pivot_table(values='respuestas',index='opción',columns='sexo').fillna(0)
+        #agregamos las opciones faltantes
+        df_rp_sx = df_rp_sx.append(pd.DataFrame({},index=opciones_faltantes_sx)).fillna(0)
+        for col in df_rp_sx.columns:
+            df_rp_sx[col] = df_rp_sx[col].map(int)
+
+        resp_sx = df_rp_sx.to_dict(orient='index')
+        print(resp_sx)
+
+        # FITLTRO por id_pregunta y escuela
+        print("\nFiltro por pregunta y escuela")
+        script_select_escuela = '''
+SELECT p.id_dimension,d.nombre,p.descripcion, r.respuesta,e.nombre, COUNT(*)
+FROM pregunta p
+JOIN respuesta r ON r.id_pregunta = p.id_pregunta
+JOIN alumno a ON a.id_alumno = r.id_alumno
+JOIN escuela e ON e.id_escuela = a.id_escuela
+JOIN dimension d ON d.id_dimension = p.id_dimension
+WHERE p.id_pregunta={}
+GROUP BY p.descripcion, r.respuesta,e.nombre;
+        '''.format(id)
+        print("script_select_escuela: ",script_select_escuela)
+        cur.execute(script_select_escuela)
+        respuestas_escuela  =  cur.fetchall()
+        print(respuestas_escuela)
+
+        df_respuestas_pregunta_esc= pd.DataFrame(respuestas_escuela,columns=['id_dimension','dimensión','pregunta','opción','escuela','respuestas'])
+
+        ##
+        opciones_faltantes_esc = []
+        for opcion_presente in opciones:
+            if opcion_presente not in list(df_respuestas_pregunta_esc['opción'].unique()):
+                opciones_faltantes_esc.append(opcion_presente)
+        print("opciones faltantes en escuela: ",opciones_faltantes_esc)
+        ##
+
+        df_rp_esc = df_respuestas_pregunta_esc.pivot_table(values='respuestas',index='opción',columns='escuela').fillna(0)
+        #agregamos las opciones faltantes
+        df_rp_esc = df_rp_esc.append(pd.DataFrame({},index=opciones_faltantes_esc)).fillna(0)
+        for col in df_rp_esc.columns:
+            df_rp_esc[col] = df_rp_esc[col].map(int)
+
+        resp_esc = df_rp_esc.to_dict(orient='index')
+        print(resp_esc)
+
+        # FITLTRO por id_pregunta y año de ingreso
+        print("\nFiltro por pregunta y año de ingreso")
+        script_select_anio = '''
+SELECT p.id_dimension,d.nombre,p.descripcion, r.respuesta,a.anio_ingreso, COUNT(*)
+FROM pregunta p
+JOIN respuesta r ON r.id_pregunta = p.id_pregunta
+JOIN alumno a ON a.id_alumno = r.id_alumno
+JOIN dimension d ON d.id_dimension = p.id_dimension
+WHERE p.id_pregunta={}
+GROUP BY p.descripcion, r.respuesta,a.anio_ingreso;
+        '''.format(id)
+        print("script_select_anio: ",script_select_anio)
+        cur.execute(script_select_anio)
+        respuestas_anio_ingreso  =  cur.fetchall()
+        print(respuestas_anio_ingreso)
+
+        df_respuestas_pregunta_anio= pd.DataFrame(respuestas_anio_ingreso,columns=['id_dimension','dimensión','pregunta','opción','anio_ingreso','respuestas'])
+        
+        ##
+        opciones_faltantes_anio = []
+        for opcion_presente in opciones:
+            if opcion_presente not in list(df_respuestas_pregunta_anio['opción'].unique()):
+                opciones_faltantes_anio.append(opcion_presente)
+        print("opciones faltantes en año de ingreso: ",opciones_faltantes_anio)
+        ##
+
+        df_rp_anio = df_respuestas_pregunta_anio.pivot_table(values='respuestas',index='opción',columns='anio_ingreso').fillna(0)
+        #agregamos las opciones faltantes
+        df_rp_anio = df_rp_anio.append(pd.DataFrame({},index=opciones_faltantes_anio)).fillna(0)
+        for col in df_rp_anio.columns:
+            df_rp_anio[col] = df_rp_anio[col].map(int)
+
+        resp_anio = df_rp_anio.to_dict(orient='index')
+        print(resp_anio)
+
+        respuesta = {
+            "id_pregunta":id_pregunta,
+            "id_dimension":id_dimension,
+            "pregunta":pregunta,
+            "respuestas":{}
+        }
+        print("\nrespuesta antes de terminar: ",respuesta)
+
+        for opcion in opciones:
+            respuesta['respuestas'][opcion] = {
+                "sexo": resp_sx[opcion],
+                "anio_ingreso": resp_anio[opcion],
+                "escuela": resp_esc[opcion],
+            }
+
+        print("\nrespuesta después de terminar: ",respuesta)
+
+        response = {
+            "respuesta": json.loads(json.dumps(respuesta,default=default)),
+            "status":200
+        }
+
+    except Exception as e:
+        print(e)
+        response={
+            "respuesta":"Error",
+            "status":500
+        }
+    return response
+
 # FIN RESPUESTAS - ALUMNOS
 
 # PREGUNTAS
