@@ -283,9 +283,9 @@ SELECT d.nombre, p.descripcion, r.respuesta, COUNT(*)
 FROM dimension d
 JOIN pregunta p ON d.id_dimension = p.id_dimension
 JOIN respuesta r ON p.id_pregunta = r.id_pregunta
-WHERE d.id_dimension = 1
+WHERE d.id_dimension = {}
 GROUP BY d.nombre, p.descripcion, r.respuesta;
-        '''
+        '''.format(id)
         print("script_select: ",script_select)
         cur.execute(script_select)
         respuestas  =  cur.fetchall()
