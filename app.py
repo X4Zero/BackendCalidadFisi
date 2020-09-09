@@ -165,11 +165,24 @@ def encuestados():
             lista_encuestados_anio.append(encuestados_anio)
         print(respuesta_3)
 
+        # NUMERO DE ENCUESTADOS POR ESCUELA
+        script_select = "SELECT e.nombre,COUNT(*) FROM alumno a JOIN escuela e ON e.id_escuela = a.id_escuela GROUP BY e.nombre;"
+        print("script_select: ",script_select)
+        cur.execute(script_select)
+        respuesta_4 =  cur.fetchall()
+
+        lista_encuestados_esc=[]
+        for reg in respuesta_4:
+            encuestados_esc = {"escuela":reg[0],"encuestados":reg[1]}
+            lista_encuestados_esc.append(encuestados_esc)
+        print(respuesta_4)
+
         response = {
             "respuesta": {
                 "cantidad encuestados":cantidad_encuestados,
                 "encuestados por sexo":lista_encuestados_sexo,
                 "encuestados por anio":lista_encuestados_anio,
+                "encuestados por escuela":lista_encuestados_esc,
             },
             "status":200
         }
